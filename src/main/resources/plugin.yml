@@ -1,0 +1,9 @@
+main: de.timesnake.game.graffiti.main.GameGraffiti
+version: 1.0
+name: game-graffiti
+author: Mn
+depend: [ basic-lounge-bridge ]
+api-version: 1.13
+
+commands:
+     
