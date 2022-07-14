@@ -3,13 +3,13 @@ package de.timesnake.game.graffiti.server;
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
 import de.timesnake.basic.bukkit.util.user.scoreboard.Sideboard;
-import de.timesnake.basic.game.util.Game;
 import de.timesnake.basic.loungebridge.util.game.GameElement;
 import de.timesnake.basic.loungebridge.util.game.ItemSpawner;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServer;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServerManager;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
 import de.timesnake.database.util.game.DbGame;
+import de.timesnake.database.util.game.DbTmpGame;
 import de.timesnake.game.graffiti.main.GameGraffiti;
 import de.timesnake.game.graffiti.user.GraffitiUser;
 import de.timesnake.game.graffiti.user.UserManager;
@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GraffitiServerManager extends LoungeBridgeServerManager {
+public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGame> {
 
     public static GraffitiServerManager getInstance() {
         return (GraffitiServerManager) ServerManager.getInstance();
@@ -81,8 +81,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager {
     }
 
     @Override
-    protected Game loadGame(DbGame dbGame, boolean loadWorlds) {
-        return new GraffitiGame(dbGame, true);
+    protected GraffitiGame loadGame(DbGame dbGame, boolean loadWorlds) {
+        return new GraffitiGame((DbTmpGame) dbGame, true);
     }
 
     @Override

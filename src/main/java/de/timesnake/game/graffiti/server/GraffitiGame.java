@@ -1,16 +1,16 @@
 package de.timesnake.game.graffiti.server;
 
-import de.timesnake.basic.game.util.Game;
 import de.timesnake.basic.game.util.Team;
-import de.timesnake.database.util.game.DbGame;
+import de.timesnake.basic.game.util.TmpGame;
 import de.timesnake.database.util.game.DbMap;
+import de.timesnake.database.util.game.DbTmpGame;
 
-public class GraffitiGame extends Game {
+public class GraffitiGame extends TmpGame {
 
     private static final String BLUE_TEAM_NAME = "blue";
     private static final String RED_TEAM_NAME = "red";
 
-    public GraffitiGame(DbGame game, boolean loadWorlds) {
+    public GraffitiGame(DbTmpGame game, boolean loadWorlds) {
         super(game, loadWorlds);
     }
 
