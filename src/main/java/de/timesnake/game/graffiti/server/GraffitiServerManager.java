@@ -3,9 +3,7 @@ package de.timesnake.game.graffiti.server;
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
 import de.timesnake.basic.bukkit.util.user.scoreboard.Sideboard;
-import de.timesnake.basic.loungebridge.util.game.GameElement;
 import de.timesnake.basic.loungebridge.util.game.ItemSpawner;
-import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServer;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServerManager;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
 import de.timesnake.database.util.game.DbGame;
@@ -22,8 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.time.Duration;
-import java.util.LinkedList;
-import java.util.List;
 
 public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGame> {
 
@@ -65,14 +61,10 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.spectatorSideboard.setScore(1, "§9§lPlayers");
         // players
 
-        List<GameElement> gameElements = new LinkedList<>();
-
         for (int i = GraffitiMap.ITEM_SPAWNER_START_INDEX; i < GraffitiMap.ITEM_SPAWNER_END_INDEX; i++) {
-            gameElements.add(new ItemSpawner(i, GraffitiServer.ITEM_SPAWNER_DELAY,
+            this.getToolManager().add(new ItemSpawner(i, GraffitiServer.ITEM_SPAWNER_DELAY,
                     GraffitiServer.ITEM_SPAWNER_DELAY_RANGE, GraffitiServer.ITEM_SPAWNER_ITEMS));
         }
-
-        super.getGameElementManager().addGameElement(gameElements);
     }
 
     @Override
@@ -98,11 +90,6 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     @Override
     public void broadcastGameMessage(String message) {
         Server.broadcastMessage(Chat.getSenderPlugin(Plugin.GRAFFITI) + message);
-    }
-
-    @Override
-    public void prepareGame() {
-
     }
 
     @Override
@@ -152,7 +139,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         }, 0, 20, GameGraffiti.getPlugin());
     }
 
-    public void stopGame() {
+    @Override
+    public void onGameStop() {
         if (this.stopped) {
             return;
         }
@@ -192,13 +180,10 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.broadcastGameMessage("§fBlocks: " + ChatColor.BLUE + blueBlocks + ChatColor.PUBLIC +
                 " - " + ChatColor.RED + redBlocks);
         this.broadcastGameMessage(Chat.getLineSeparator());
-
-
-        LoungeBridgeServer.closeGame();
     }
 
     @Override
-    public void resetGame() {
+    public void onGameReset() {
         if (this.getMap() != null) {
             Server.getWorldManager().reloadWorld(this.getMap().getWorld());
         }
