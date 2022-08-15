@@ -4,6 +4,7 @@ import de.timesnake.basic.bukkit.util.user.ExItemStack;
 import de.timesnake.game.graffiti.server.GraffitiServer;
 import de.timesnake.game.graffiti.server.PaintManager;
 import de.timesnake.game.graffiti.user.GraffitiUser;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
@@ -47,7 +48,7 @@ public class AirPistol extends Gun {
         }
 
         paintball.setShooter(user.getPlayer());
-        paintball.setCustomName(this.name);
+        paintball.customName(Component.text(this.name));
         paintball.setCustomNameVisible(false);
         paintball.setVelocity(user.getLocation().getDirection().normalize().multiply(1.2));
     }
