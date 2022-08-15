@@ -9,6 +9,8 @@ import de.timesnake.game.graffiti.main.GameGraffiti;
 import de.timesnake.game.graffiti.server.GraffitiServer;
 import de.timesnake.game.graffiti.server.PaintManager;
 import de.timesnake.library.basic.util.Status;
+import de.timesnake.library.basic.util.chat.ExTextColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -187,7 +189,7 @@ public class UserManager implements Listener {
 
         Server.runTaskTimerSynchrony((time) -> {
             if (time > 0) {
-                user.sendTitle("§c" + time, "", Duration.ofSeconds(1));
+                user.showTitle(Component.text(time, ExTextColor.WARNING), Component.empty(), Duration.ofSeconds(1));
             } else {
                 user.lockLocation(false);
             }

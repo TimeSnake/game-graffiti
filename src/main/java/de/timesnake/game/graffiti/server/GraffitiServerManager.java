@@ -13,8 +13,9 @@ import de.timesnake.game.graffiti.user.GraffitiUser;
 import de.timesnake.game.graffiti.user.UserManager;
 import de.timesnake.library.basic.util.Status;
 import de.timesnake.library.basic.util.Tuple;
-import de.timesnake.library.basic.util.chat.ChatColor;
+import de.timesnake.library.basic.util.chat.ExTextColor;
 import de.timesnake.library.extension.util.chat.Chat;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -88,8 +89,14 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     }
 
     @Override
+    @Deprecated
     public void broadcastGameMessage(String message) {
-        Server.broadcastMessage(Chat.getSenderPlugin(Plugin.GRAFFITI) + message);
+        Server.broadcastMessage(Plugin.GRAFFITI, message);
+    }
+
+    @Override
+    public void broadcastGameMessage(Component message) {
+        Server.broadcastMessage(Plugin.GRAFFITI, message);
     }
 
     @Override
@@ -160,25 +167,30 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
         this.broadcastGameMessage(Chat.getLineSeparator());
 
-        String title;
+        Component title;
 
         if (blueBlocks > redBlocks) {
-            title = ChatColor.BLUE + "Blue" + ChatColor.GOLD + " wins";
-            this.broadcastGameMessage(ChatColor.BLUE + "Blue" + " §fwins!");
+            title = Component.text("Blue", ExTextColor.BLUE).append(Component.text(" wins", ExTextColor.GOLD));
+            this.broadcastGameMessage(Component.text("Blue", ExTextColor.BLUE)
+                    .append(Component.text("wins!", ExTextColor.WHITE)));
         } else if (redBlocks > blueBlocks) {
-            title = ChatColor.RED + "Red" + ChatColor.GOLD + " wins";
-            this.broadcastGameMessage(ChatColor.RED + "Red" + " §fwins!");
+            title = Component.text("Red", ExTextColor.RED).append(Component.text(" wins", ExTextColor.GOLD));
+            this.broadcastGameMessage(Component.text("Red", ExTextColor.RED)
+                    .append(Component.text("wins!", ExTextColor.WHITE)));
         } else {
-            title = "§fTie";
-            this.broadcastGameMessage(ChatColor.WHITE + "Tie!");
+            title = Component.text("Tie", ExTextColor.WHITE);
+            this.broadcastGameMessage(Component.text("Tie!", ExTextColor.WHITE));
         }
 
-        Server.broadcastTitle(title,
-                ChatColor.BLUE + blueBlocks + ChatColor.PUBLIC + " - " + ChatColor.RED + redBlocks,
+        Server.broadcastTitle(title, Component.text(blueBlocks, ExTextColor.BLUE)
+                        .append(Component.text(" - ", ExTextColor.PUBLIC))
+                        .append(Component.text(redBlocks, ExTextColor.RED)),
                 Duration.ofSeconds(5));
 
-        this.broadcastGameMessage("§fBlocks: " + ChatColor.BLUE + blueBlocks + ChatColor.PUBLIC +
-                " - " + ChatColor.RED + redBlocks);
+        this.broadcastGameMessage(Component.text("Blocks: ", ExTextColor.PUBLIC)
+                .append(Component.text(blueBlocks, ExTextColor.BLUE))
+                .append(Component.text(" - ", ExTextColor.PUBLIC))
+                .append(Component.text(redBlocks, ExTextColor.RED)));
         this.broadcastGameMessage(Chat.getLineSeparator());
     }
 
