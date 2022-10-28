@@ -20,6 +20,7 @@ package de.timesnake.game.graffiti.server;
 
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
+import de.timesnake.basic.bukkit.util.world.ExWorld;
 import de.timesnake.basic.game.util.Map;
 import de.timesnake.database.util.game.DbMap;
 import org.bukkit.GameRule;
@@ -67,9 +68,9 @@ public class GraffitiMap extends Map {
         }
 
         this.getWorld().setAutoSave(false);
-        this.getWorld().allowBlockPlace(false);
-        this.getWorld().allowBlockBreak(false);
-        this.getWorld().allowFoodChange(false);
+        this.getWorld().restrict(ExWorld.Restriction.BLOCK_PLACE, true);
+        this.getWorld().restrict(ExWorld.Restriction.BLOCK_BREAK, true);
+        this.getWorld().restrict(ExWorld.Restriction.FOOD_CHANGE, true);
         this.getWorld().setGameRule(GameRule.NATURAL_REGENERATION, false);
         this.getWorld().setExceptService(true);
     }
