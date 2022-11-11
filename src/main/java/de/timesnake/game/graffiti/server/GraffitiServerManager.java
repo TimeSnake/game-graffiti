@@ -1,5 +1,5 @@
 /*
- * game-graffiti.main
+ * timesnake.game-graffiti.main
  * Copyright (C) 2022 timesnake
  *
  * This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.userManager = new UserManager();
         this.paintManager = new PaintManager();
 
-        this.gameSideboard = Server.getScoreboardManager().registerNewSideboard(GraffitiServer.getGame().getName(),
+        this.gameSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
                 "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.gameSideboard.setScore(4, "§c§lTime");
@@ -71,7 +71,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.gameSideboard.setScore(1, "§9§lPlayers");
         // players
 
-        this.spectatorSideboard = Server.getScoreboardManager().registerNewSideboard(GraffitiServer.getGame().getName(),
+        this.spectatorSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
                 "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.spectatorSideboard.setScore(4, "§c§lTime");
@@ -119,7 +119,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
     @Override
     public void onMapLoad() {
-        this.gameSideboard = Server.getScoreboardManager().registerNewSideboard(GraffitiServer.getGame().getName(),
+        this.gameSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
                 "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.gameSideboard.setScore(4, "§c§lTime");
@@ -128,7 +128,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.gameSideboard.setScore(1, "§9§lPlayers");
         // players
 
-        this.spectatorSideboard = Server.getScoreboardManager().registerNewSideboard(GraffitiServer.getGame().getName(),
+        this.spectatorSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
                 "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.spectatorSideboard.setScore(4, "§c§lTime");
