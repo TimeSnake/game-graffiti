@@ -1,5 +1,5 @@
 /*
- * game-graffiti.main
+ * workspace.game-graffiti.main
  * Copyright (C) 2022 timesnake
  *
  * This program is free software; you can redistribute it and/or
@@ -18,8 +18,8 @@
 
 package de.timesnake.game.graffiti.server;
 
-import de.timesnake.basic.game.util.Team;
-import de.timesnake.basic.game.util.TmpGame;
+import de.timesnake.basic.game.util.game.Team;
+import de.timesnake.basic.game.util.game.TmpGame;
 import de.timesnake.database.util.game.DbMap;
 import de.timesnake.database.util.game.DbTmpGame;
 
