@@ -1,5 +1,5 @@
 /*
- * timesnake.game-graffiti.main
+ * workspace.game-graffiti.main
  * Copyright (C) 2022 timesnake
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ package de.timesnake.game.graffiti.server;
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
 import de.timesnake.basic.bukkit.util.user.scoreboard.Sideboard;
+import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.loungebridge.util.game.ItemSpawner;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServerManager;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
@@ -34,7 +35,6 @@ import de.timesnake.library.basic.util.Tuple;
 import de.timesnake.library.basic.util.chat.ExTextColor;
 import de.timesnake.library.extension.util.chat.Chat;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -247,7 +247,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     }
 
     @Override
-    public Location getSpectatorSpawn() {
+    public ExLocation getSpectatorSpawn() {
         return GraffitiServer.getSpectatorSpawn();
     }
 
