@@ -4,7 +4,7 @@
 
 package de.timesnake.game.graffiti.item;
 
-import de.timesnake.basic.bukkit.util.user.ExItemStack;
+import de.timesnake.basic.bukkit.util.user.inventory.ExItemStack;
 import de.timesnake.game.graffiti.server.GraffitiServer;
 import de.timesnake.game.graffiti.server.PaintManager;
 import de.timesnake.game.graffiti.user.GraffitiUser;
