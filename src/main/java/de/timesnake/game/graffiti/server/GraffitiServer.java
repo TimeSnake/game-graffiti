@@ -4,11 +4,9 @@
 
 package de.timesnake.game.graffiti.server;
 
-import de.timesnake.basic.bukkit.util.user.scoreboard.Sideboard;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServer;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
+import org.bukkit.inventory.ItemStack;
 
 public class GraffitiServer extends LoungeBridgeServer {
 
@@ -22,7 +20,7 @@ public class GraffitiServer extends LoungeBridgeServer {
     public static final double PAINT_DAMAGE = 2;
 
     public static GraffitiGame getGame() {
-        return ((GraffitiGame) server.getGame());
+        return server.getGame();
     }
 
     public static GraffitiMap getMap() {
@@ -31,10 +29,6 @@ public class GraffitiServer extends LoungeBridgeServer {
 
     public static void updateSideboardPlayers() {
         server.updateSideboardPlayers();
-    }
-
-    public static Sideboard getGameSideboard() {
-        return server.getGameSideboard();
     }
 
     private static final GraffitiServerManager server = GraffitiServerManager.getInstance();
