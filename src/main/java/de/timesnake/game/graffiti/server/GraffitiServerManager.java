@@ -18,13 +18,12 @@ import de.timesnake.game.graffiti.user.GraffitiUser;
 import de.timesnake.game.graffiti.user.UserManager;
 import de.timesnake.library.basic.util.Status;
 import de.timesnake.library.basic.util.Tuple;
-import de.timesnake.library.basic.util.chat.ExTextColor;
+import de.timesnake.library.chat.ExTextColor;
 import de.timesnake.library.extension.util.chat.Chat;
+import java.time.Duration;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.time.Duration;
 
 public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGame> {
 
@@ -48,8 +47,9 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.userManager = new UserManager();
         this.paintManager = new PaintManager();
 
-        this.gameSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
-                "§6§l" + GraffitiServer.getGame().getDisplayName());
+        this.gameSideboard = Server.getScoreboardManager()
+                .registerSideboard(GraffitiServer.getGame().getName(),
+                        "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.gameSideboard.setScore(4, "§c§lTime");
         // time
@@ -57,8 +57,9 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.gameSideboard.setScore(1, "§9§lPlayers");
         // players
 
-        this.spectatorSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
-                "§6§l" + GraffitiServer.getGame().getDisplayName());
+        this.spectatorSideboard = Server.getScoreboardManager()
+                .registerSideboard(GraffitiServer.getGame().getName(),
+                        "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.spectatorSideboard.setScore(4, "§c§lTime");
         // time
@@ -66,7 +67,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.spectatorSideboard.setScore(1, "§9§lPlayers");
         // players
 
-        for (int i = GraffitiMap.ITEM_SPAWNER_START_INDEX; i < GraffitiMap.ITEM_SPAWNER_END_INDEX; i++) {
+        for (int i = GraffitiMap.ITEM_SPAWNER_START_INDEX; i < GraffitiMap.ITEM_SPAWNER_END_INDEX;
+                i++) {
             this.getToolManager().add(new ItemSpawner(i, GraffitiServer.ITEM_SPAWNER_DELAY,
                     GraffitiServer.ITEM_SPAWNER_DELAY_RANGE, GraffitiServer.ITEM_SPAWNER_ITEMS));
         }
@@ -95,7 +97,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     @Override
     @Deprecated
     public void broadcastGameMessage(String message) {
-        Server.broadcastMessage(Plugin.GRAFFITI, message);
+        Server.broadcastTDMessage(Plugin.GRAFFITI, message);
     }
 
     @Override
@@ -105,8 +107,9 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
     @Override
     public void onMapLoad() {
-        this.gameSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
-                "§6§l" + GraffitiServer.getGame().getDisplayName());
+        this.gameSideboard = Server.getScoreboardManager()
+                .registerSideboard(GraffitiServer.getGame().getName(),
+                        "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.gameSideboard.setScore(4, "§c§lTime");
         // time
@@ -114,8 +117,9 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.gameSideboard.setScore(1, "§9§lPlayers");
         // players
 
-        this.spectatorSideboard = Server.getScoreboardManager().registerSideboard(GraffitiServer.getGame().getName(),
-                "§6§l" + GraffitiServer.getGame().getDisplayName());
+        this.spectatorSideboard = Server.getScoreboardManager()
+                .registerSideboard(GraffitiServer.getGame().getName(),
+                        "§6§l" + GraffitiServer.getGame().getDisplayName());
 
         this.spectatorSideboard.setScore(4, "§c§lTime");
         // time
@@ -174,11 +178,13 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         Component title;
 
         if (blueBlocks > redBlocks) {
-            title = Component.text("Blue", ExTextColor.BLUE).append(Component.text(" wins", ExTextColor.GOLD));
+            title = Component.text("Blue", ExTextColor.BLUE)
+                    .append(Component.text(" wins", ExTextColor.GOLD));
             this.broadcastGameMessage(Component.text("Blue", ExTextColor.BLUE)
                     .append(Component.text("wins!", ExTextColor.WHITE)));
         } else if (redBlocks > blueBlocks) {
-            title = Component.text("Red", ExTextColor.RED).append(Component.text(" wins", ExTextColor.GOLD));
+            title = Component.text("Red", ExTextColor.RED)
+                    .append(Component.text(" wins", ExTextColor.GOLD));
             this.broadcastGameMessage(Component.text("Red", ExTextColor.RED)
                     .append(Component.text("wins!", ExTextColor.WHITE)));
         } else {
@@ -250,10 +256,12 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
     public void updateSideboardPlayers() {
         String size = String.valueOf(Server.getUsers(u ->
-                u.getStatus().equals(Status.User.IN_GAME) || u.getStatus().equals(Status.User.PRE_GAME)).size());
+                u.getStatus().equals(Status.User.IN_GAME) || u.getStatus()
+                        .equals(Status.User.PRE_GAME)).size());
         this.gameSideboard.setScore(0, size);
         this.spectatorSideboard.setScore(0, String.valueOf(Server.getUsers(u ->
-                u.getStatus().equals(Status.User.IN_GAME) || u.getStatus().equals(Status.User.PRE_GAME)).size()));
+                u.getStatus().equals(Status.User.IN_GAME) || u.getStatus()
+                        .equals(Status.User.PRE_GAME)).size()));
     }
 
     public Sideboard getGameSideboard() {
