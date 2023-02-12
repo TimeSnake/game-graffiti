@@ -27,7 +27,6 @@ public class GraffitiUser extends GameUser {
         this.setItems();
 
         GraffitiServer.updateSideboardPlayers();
-        this.setSideboard(GraffitiServer.getGameSideboard());
     }
 
     public ExLocation getTeamSpawn() {
@@ -50,16 +49,22 @@ public class GraffitiUser extends GameUser {
             this.setItem(PaintManager.BLUE_SPRAY_BOTTLE);
             this.setItem(PaintManager.SNIPER_GUN.getBlueItem());
             this.setItem(PaintManager.AIR_PISTOL.getBlueItem());
-            this.setItem(EquipmentSlot.CHEST, ExItemStack.getLeatherArmor(Material.LEATHER_CHESTPLATE, Color.BLUE));
-            this.setItem(EquipmentSlot.LEGS, ExItemStack.getLeatherArmor(Material.LEATHER_LEGGINGS, Color.BLUE));
-            this.setItem(EquipmentSlot.FEET, ExItemStack.getLeatherArmor(Material.LEATHER_BOOTS, Color.BLUE));
+            this.setItem(EquipmentSlot.CHEST,
+                    ExItemStack.getLeatherArmor(Material.LEATHER_CHESTPLATE, Color.BLUE));
+            this.setItem(EquipmentSlot.LEGS,
+                    ExItemStack.getLeatherArmor(Material.LEATHER_LEGGINGS, Color.BLUE));
+            this.setItem(EquipmentSlot.FEET,
+                    ExItemStack.getLeatherArmor(Material.LEATHER_BOOTS, Color.BLUE));
         } else {
             this.setItem(PaintManager.RED_SPRAY_BOTTLE);
             this.setItem(PaintManager.SNIPER_GUN.getRedItem());
             this.setItem(PaintManager.AIR_PISTOL.getRedItem());
-            this.setItem(EquipmentSlot.CHEST, ExItemStack.getLeatherArmor(Material.LEATHER_CHESTPLATE, Color.RED));
-            this.setItem(EquipmentSlot.LEGS, ExItemStack.getLeatherArmor(Material.LEATHER_LEGGINGS, Color.RED));
-            this.setItem(EquipmentSlot.FEET, ExItemStack.getLeatherArmor(Material.LEATHER_BOOTS, Color.RED));
+            this.setItem(EquipmentSlot.CHEST,
+                    ExItemStack.getLeatherArmor(Material.LEATHER_CHESTPLATE, Color.RED));
+            this.setItem(EquipmentSlot.LEGS,
+                    ExItemStack.getLeatherArmor(Material.LEATHER_LEGGINGS, Color.RED));
+            this.setItem(EquipmentSlot.FEET,
+                    ExItemStack.getLeatherArmor(Material.LEATHER_BOOTS, Color.RED));
         }
     }
 }
