@@ -6,7 +6,10 @@ package de.timesnake.game.graffiti.server;
 
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
-import de.timesnake.basic.bukkit.util.user.scoreboard.Sideboard;
+import de.timesnake.basic.bukkit.util.user.User;
+import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard;
+import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard.LineId;
+import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboardBuilder;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.loungebridge.util.game.ItemSpawner;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServerManager;
@@ -31,13 +34,12 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         return (GraffitiServerManager) ServerManager.getInstance();
     }
 
-    private boolean isRunning = false;
     private boolean stopAfterStart = false;
     private boolean stopped = false;
     private Integer time;
     private BukkitTask timeTask;
-    private Sideboard gameSideboard;
-    private Sideboard spectatorSideboard;
+    private ExSideboard gameSideboard;
+    private ExSideboard spectatorSideboard;
     private UserManager userManager;
     private PaintManager paintManager;
 
@@ -48,24 +50,20 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         this.paintManager = new PaintManager();
 
         this.gameSideboard = Server.getScoreboardManager()
-                .registerSideboard(GraffitiServer.getGame().getName(),
-                        "§6§l" + GraffitiServer.getGame().getDisplayName());
-
-        this.gameSideboard.setScore(4, "§c§lTime");
-        // time
-        this.gameSideboard.setScore(2, "§r§f-----------");
-        this.gameSideboard.setScore(1, "§9§lPlayers");
-        // players
+                .registerExSideboard(new ExSideboardBuilder()
+                        .name(GraffitiServer.getGame().getName())
+                        .title("§6§l" + GraffitiServer.getGame().getDisplayName())
+                        .lineSpacer()
+                        .addLine(LineId.TIME)
+                        .addLine(LineId.PLAYERS));
 
         this.spectatorSideboard = Server.getScoreboardManager()
-                .registerSideboard(GraffitiServer.getGame().getName(),
-                        "§6§l" + GraffitiServer.getGame().getDisplayName());
-
-        this.spectatorSideboard.setScore(4, "§c§lTime");
-        // time
-        this.spectatorSideboard.setScore(2, "§r§f-----------");
-        this.spectatorSideboard.setScore(1, "§9§lPlayers");
-        // players
+                .registerExSideboard(new ExSideboardBuilder()
+                        .name(GraffitiServer.getGame().getName())
+                        .title("§6§l" + GraffitiServer.getGame().getDisplayName())
+                        .lineSpacer()
+                        .addLine(LineId.TIME)
+                        .addLine(LineId.PLAYERS));
 
         for (int i = GraffitiMap.ITEM_SPAWNER_START_INDEX; i < GraffitiMap.ITEM_SPAWNER_END_INDEX;
                 i++) {
@@ -90,43 +88,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     }
 
     @Override
-    public boolean isGameRunning() {
-        return this.isRunning;
-    }
-
-    @Override
-    @Deprecated
-    public void broadcastGameMessage(String message) {
-        Server.broadcastTDMessage(Plugin.GRAFFITI, message);
-    }
-
-    @Override
-    public void broadcastGameMessage(Component message) {
-        Server.broadcastMessage(Plugin.GRAFFITI, message);
-    }
-
-    @Override
     public void onMapLoad() {
-        this.gameSideboard = Server.getScoreboardManager()
-                .registerSideboard(GraffitiServer.getGame().getName(),
-                        "§6§l" + GraffitiServer.getGame().getDisplayName());
-
-        this.gameSideboard.setScore(4, "§c§lTime");
-        // time
-        this.gameSideboard.setScore(2, "§r§f-----------");
-        this.gameSideboard.setScore(1, "§9§lPlayers");
-        // players
-
-        this.spectatorSideboard = Server.getScoreboardManager()
-                .registerSideboard(GraffitiServer.getGame().getName(),
-                        "§6§l" + GraffitiServer.getGame().getDisplayName());
-
-        this.spectatorSideboard.setScore(4, "§c§lTime");
-        // time
-        this.spectatorSideboard.setScore(2, "§r§f-----------");
-        this.spectatorSideboard.setScore(1, "§9§lPlayers");
-        // players
-
         this.time = this.getMap().getTime();
         this.updateSideboardTime();
     }
@@ -137,10 +99,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
             this.stopGame();
         }
 
-        Server.getInGameUsers().forEach(u -> u.lockLocation(false));
+        Server.getInGameUsers().forEach(User::unlockLocation);
         this.userManager.run();
-
-        this.isRunning = true;
 
         this.timeTask = Server.runTaskTimerSynchrony(() -> {
             this.updateSideboardTime();
@@ -161,7 +121,6 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
         }
 
         this.stopped = true;
-        this.isRunning = false;
 
         if (this.timeTask != null) {
             this.timeTask.cancel();
@@ -244,27 +203,25 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     }
 
     @Override
-    public Sideboard getSpectatorSideboard() {
+    public ExSideboard getSpectatorSideboard() {
         return this.spectatorSideboard;
     }
 
     public void updateSideboardTime() {
-        String timeStr = Chat.getTimeString(this.time);
-        this.gameSideboard.setScore(3, timeStr);
-        this.spectatorSideboard.setScore(3, timeStr);
+        this.gameSideboard.updateScore(LineId.TIME, this.time);
+        this.spectatorSideboard.updateScore(LineId.TIME, this.time);
     }
 
     public void updateSideboardPlayers() {
-        String size = String.valueOf(Server.getUsers(u ->
-                u.getStatus().equals(Status.User.IN_GAME) || u.getStatus()
-                        .equals(Status.User.PRE_GAME)).size());
-        this.gameSideboard.setScore(0, size);
-        this.spectatorSideboard.setScore(0, String.valueOf(Server.getUsers(u ->
-                u.getStatus().equals(Status.User.IN_GAME) || u.getStatus()
-                        .equals(Status.User.PRE_GAME)).size()));
+        int size = Server.getUsers(u ->
+                u.getStatus().equals(Status.User.IN_GAME)
+                        || u.getStatus().equals(Status.User.PRE_GAME)).size();
+        this.gameSideboard.updateScore(LineId.PLAYERS, size);
+        this.spectatorSideboard.updateScore(LineId.PLAYERS, size);
     }
 
-    public Sideboard getGameSideboard() {
+    @Override
+    public ExSideboard getGameSideboard() {
         return this.gameSideboard;
     }
 
