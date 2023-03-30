@@ -140,12 +140,12 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
             title = Component.text("Blue", ExTextColor.BLUE)
                     .append(Component.text(" wins", ExTextColor.GOLD));
             this.broadcastGameMessage(Component.text("Blue", ExTextColor.BLUE)
-                    .append(Component.text("wins!", ExTextColor.WHITE)));
+                    .append(Component.text(" wins!", ExTextColor.WHITE)));
         } else if (redBlocks > blueBlocks) {
             title = Component.text("Red", ExTextColor.RED)
                     .append(Component.text(" wins", ExTextColor.GOLD));
             this.broadcastGameMessage(Component.text("Red", ExTextColor.RED)
-                    .append(Component.text("wins!", ExTextColor.WHITE)));
+                    .append(Component.text(" wins!", ExTextColor.WHITE)));
         } else {
             title = Component.text("Tie", ExTextColor.WHITE);
             this.broadcastGameMessage(Component.text("Tie!", ExTextColor.WHITE));
