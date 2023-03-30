@@ -4,12 +4,12 @@
 
 package de.timesnake.game.graffiti.server;
 
-import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.bukkit.util.world.ExWorld;
 import de.timesnake.basic.bukkit.util.world.ExWorld.Restriction;
 import de.timesnake.basic.game.util.game.Map;
 import de.timesnake.database.util.game.DbMap;
+import de.timesnake.library.basic.util.Loggers;
 import java.util.Collection;
 import java.util.List;
 import org.bukkit.GameRule;
@@ -40,14 +40,14 @@ public class GraffitiMap extends Map {
                 try {
                     this.mapSize = Integer.parseInt(info.replace(MAP_SIZE_TOKEN, ""));
                 } catch (NumberFormatException e) {
-                    Server.printWarning(Plugin.GRAFFITI, "Can not load map size of map " +
+                    Loggers.GAME.warning("Can not load map size of map " +
                             super.name + ", info map size is not an integer");
                 }
             } else if (info.startsWith(TIME_TOKEN)) {
                 try {
                     this.time = Integer.parseInt(info.replace(TIME_TOKEN, ""));
                 } catch (NumberFormatException e) {
-                    Server.printWarning(Plugin.GRAFFITI, "Can not load time of map " +
+                    Loggers.GAME.warning("Can not load time of map " +
                             super.name + ", info time is not an integer");
                 }
             }
