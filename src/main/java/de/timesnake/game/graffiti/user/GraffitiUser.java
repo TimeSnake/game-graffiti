@@ -21,7 +21,9 @@ public class GraffitiUser extends GameUser {
     }
 
     @Override
-    public void joinGame() {
+    public void onGameJoin() {
+        super.onGameJoin();
+
         this.teleport(this.getTeamSpawn());
         this.lockLocation(true);
         this.setItems();
