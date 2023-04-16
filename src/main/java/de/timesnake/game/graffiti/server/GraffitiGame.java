@@ -5,7 +5,7 @@
 package de.timesnake.game.graffiti.server;
 
 import de.timesnake.basic.game.util.game.Team;
-import de.timesnake.basic.game.util.game.TmpGame;
+import de.timesnake.basic.loungebridge.util.game.TmpGame;
 import de.timesnake.database.util.game.DbMap;
 import de.timesnake.database.util.game.DbTmpGame;
 
