@@ -136,19 +136,32 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
         Component title;
 
+        int kills = this.getGame().getBlueTeam().getKills()
+                + this.getGame().getRedTeam().getKills();
+
+        Server.getInGameUsers().forEach(u ->
+                u.addCoins((float) ((GameUser) u).getKills() / kills *
+                        GraffitiServer.KILL_COINS_POOL, true));
+
         if (blueBlocks > redBlocks) {
             title = Component.text("Blue", ExTextColor.BLUE)
                     .append(Component.text(" wins", ExTextColor.GOLD));
             this.broadcastGameMessage(Component.text("Blue", ExTextColor.BLUE)
                     .append(Component.text(" wins!", ExTextColor.WHITE)));
+
+            this.getGame().getBlueTeam().getUsers()
+                    .forEach(u -> u.addCoins(GraffitiServer.WIN_COINS, true));
         } else if (redBlocks > blueBlocks) {
             title = Component.text("Red", ExTextColor.RED)
                     .append(Component.text(" wins", ExTextColor.GOLD));
             this.broadcastGameMessage(Component.text("Red", ExTextColor.RED)
                     .append(Component.text(" wins!", ExTextColor.WHITE)));
+            this.getGame().getRedTeam().getUsers()
+                    .forEach(u -> u.addCoins(GraffitiServer.WIN_COINS, true));
         } else {
             title = Component.text("Tie", ExTextColor.WHITE);
             this.broadcastGameMessage(Component.text("Tie!", ExTextColor.WHITE));
+            Server.getInGameUsers().forEach(u -> u.addCoins(GraffitiServer.WIN_COINS / 2, true));
         }
 
         Server.broadcastTitle(title, Component.text(blueBlocks, ExTextColor.BLUE)
