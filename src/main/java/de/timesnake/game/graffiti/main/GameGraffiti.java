@@ -10,23 +10,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class GameGraffiti extends JavaPlugin {
 
-    public static GameGraffiti getPlugin() {
-        return plugin;
-    }
+  public static GameGraffiti getPlugin() {
+    return plugin;
+  }
 
-    private static GameGraffiti plugin;
+  private static GameGraffiti plugin;
 
-    @Override
-    public void onLoad() {
-        ServerManager.setInstance(new GraffitiServerManager());
-    }
+  @Override
+  public void onLoad() {
+    ServerManager.setInstance(new GraffitiServerManager());
+  }
 
-    @Override
-    public void onEnable() {
-        GameGraffiti.plugin = this;
+  @Override
+  public void onEnable() {
+    GameGraffiti.plugin = this;
 
-        GraffitiServerManager.getInstance().onGraffitiEnable();
-    }
+    GraffitiServerManager.getInstance().onGraffitiEnable();
+  }
 
 
 }

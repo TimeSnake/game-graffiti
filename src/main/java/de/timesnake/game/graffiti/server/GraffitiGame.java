@@ -11,23 +11,23 @@ import de.timesnake.database.util.game.DbTmpGame;
 
 public class GraffitiGame extends TmpGame {
 
-    private static final String BLUE_TEAM_NAME = "blue";
-    private static final String RED_TEAM_NAME = "red";
+  private static final String BLUE_TEAM_NAME = "blue";
+  private static final String RED_TEAM_NAME = "red";
 
-    public GraffitiGame(DbTmpGame game, boolean loadWorlds) {
-        super(game, loadWorlds);
-    }
+  public GraffitiGame(DbTmpGame game, boolean loadWorlds) {
+    super(game, loadWorlds);
+  }
 
-    @Override
-    public GraffitiMap loadMap(DbMap dbMap, boolean loadWorld) {
-        return new GraffitiMap(dbMap, true);
-    }
+  @Override
+  public GraffitiMap loadMap(DbMap dbMap, boolean loadWorld) {
+    return new GraffitiMap(dbMap, true);
+  }
 
-    public Team getBlueTeam() {
-        return super.getTeam(BLUE_TEAM_NAME);
-    }
+  public Team getBlueTeam() {
+    return super.getTeam(BLUE_TEAM_NAME);
+  }
 
-    public Team getRedTeam() {
-        return super.getTeam(RED_TEAM_NAME);
-    }
+  public Team getRedTeam() {
+    return super.getTeam(RED_TEAM_NAME);
+  }
 }
