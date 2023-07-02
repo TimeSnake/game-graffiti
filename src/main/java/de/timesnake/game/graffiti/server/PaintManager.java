@@ -15,17 +15,7 @@ import de.timesnake.game.graffiti.item.PaintGun;
 import de.timesnake.game.graffiti.main.GameGraffiti;
 import de.timesnake.game.graffiti.user.GraffitiUser;
 import de.timesnake.library.basic.util.Tuple;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -36,6 +26,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+
+import java.util.*;
 
 public class PaintManager implements Listener, UserInventoryInteractListener {
 
@@ -49,13 +41,13 @@ public class PaintManager implements Listener, UserInventoryInteractListener {
   public static final HashMap<Material, Material> WHITE_PAINT_MAP = new HashMap<>();
 
   public static void drawCircle(GraffitiUser user, Block center, Location origin, double radius,
-      double density) {
+                                double density) {
     drawCircle(user, center, origin, radius, density, false);
   }
 
   public static void drawCircle(GraffitiUser user, Block center, Location origin, double radius,
-      double density,
-      boolean white) {
+                                double density,
+                                boolean white) {
     Server.runTaskAsynchrony(() -> {
       Set<Block> blocksToPaint = new HashSet<>();
 
@@ -236,7 +228,7 @@ public class PaintManager implements Listener, UserInventoryInteractListener {
               sprayVec.getX(), sprayVec.getY(), sprayVec.getZ(), 1, dust);
         }
 
-        Block block = user.getTargetBlock(MAX_SPRAY_DISTANCE);
+        Block block = user.getTargetBlock(null, MAX_SPRAY_DISTANCE);
 
         if (block != null) {
           drawCircle(user, block, loc, SPRAY_RADIUS, SPRAY_DENSITY);
