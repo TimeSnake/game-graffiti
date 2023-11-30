@@ -10,9 +10,10 @@ import de.timesnake.basic.bukkit.util.world.ExWorld.Restriction;
 import de.timesnake.basic.game.util.game.Map;
 import de.timesnake.database.util.game.DbMap;
 import de.timesnake.library.basic.util.Loggers;
+import org.bukkit.GameRule;
+
 import java.util.Collection;
 import java.util.List;
-import org.bukkit.GameRule;
 
 public class GraffitiMap extends Map {
 
@@ -53,13 +54,17 @@ public class GraffitiMap extends Map {
       }
     }
 
-    this.getWorld().setAutoSave(false);
-    this.getWorld().restrict(ExWorld.Restriction.BLOCK_PLACE, true);
-    this.getWorld().restrict(ExWorld.Restriction.BLOCK_BREAK, true);
-    this.getWorld().restrict(ExWorld.Restriction.FOOD_CHANGE, true);
-    this.getWorld().restrict(Restriction.CRAFTING, true);
-    this.getWorld().setGameRule(GameRule.NATURAL_REGENERATION, false);
-    this.getWorld().setExceptService(true);
+    ExWorld world = this.getWorld();
+
+    world.setAutoSave(false);
+    world.restrict(ExWorld.Restriction.BLOCK_PLACE, true);
+    world.restrict(ExWorld.Restriction.BLOCK_BREAK, true);
+    world.restrict(ExWorld.Restriction.FOOD_CHANGE, true);
+    world.restrict(Restriction.DROP_PICK_ITEM, true);
+    world.restrict(Restriction.CRAFTING, true);
+    world.setGameRule(GameRule.KEEP_INVENTORY, true);
+    world.setGameRule(GameRule.NATURAL_REGENERATION, false);
+    world.setExceptService(true);
   }
 
   public ExLocation getSpectatorSpawn() {

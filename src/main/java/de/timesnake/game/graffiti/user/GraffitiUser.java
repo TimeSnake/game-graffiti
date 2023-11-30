@@ -13,6 +13,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class GraffitiUser extends GameUser {
 
@@ -25,7 +26,7 @@ public class GraffitiUser extends GameUser {
     super.onGameJoin();
 
     this.teleport(this.getTeamSpawn());
-    this.lockLocation(true);
+    this.lockLocation();
     this.setItems();
 
     GraffitiServer.updateSideboardPlayers();
@@ -44,7 +45,6 @@ public class GraffitiUser extends GameUser {
 
     return GraffitiServer.getMap().getSpectatorSpawn();
   }
-
 
   private void setItems() {
     if (this.getTeam().equals(GraffitiServer.getGame().getBlueTeam())) {
@@ -68,5 +68,19 @@ public class GraffitiUser extends GameUser {
       this.setItem(EquipmentSlot.FEET,
           ExItemStack.getLeatherArmor(Material.LEATHER_BOOTS, Color.RED));
     }
+  }
+
+  @Override
+  public void onGameStart() {
+    super.onGameStart();
+
+    this.unlockLocation();
+  }
+
+  @Override
+  public @Nullable ExLocation onGameRespawn() {
+    this.setItem(EquipmentSlot.HEAD, new ExItemStack(Material.AIR));
+    this.respawnDelayed(GraffitiServer.RESPAWN_TIME);
+    return this.getTeamSpawn();
   }
 }

@@ -6,12 +6,13 @@ package de.timesnake.game.graffiti.server;
 
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
-import de.timesnake.basic.bukkit.util.user.User;
 import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard;
 import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard.LineId;
 import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboardBuilder;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
+import de.timesnake.basic.game.util.game.Team;
 import de.timesnake.basic.loungebridge.util.game.ItemSpawner;
+import de.timesnake.basic.loungebridge.util.server.EndMessage;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServerManager;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
 import de.timesnake.database.util.game.DbGame;
@@ -21,10 +22,6 @@ import de.timesnake.game.graffiti.user.GraffitiUser;
 import de.timesnake.game.graffiti.user.UserManager;
 import de.timesnake.library.basic.util.Status;
 import de.timesnake.library.basic.util.Tuple;
-import de.timesnake.library.chat.ExTextColor;
-import de.timesnake.library.extension.util.chat.Chat;
-import java.time.Duration;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -34,7 +31,6 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     return (GraffitiServerManager) ServerManager.getInstance();
   }
 
-  private boolean stopAfterStart = false;
   private boolean stopped = false;
   private Integer time;
   private BukkitTask timeTask;
@@ -70,6 +66,9 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
       this.getToolManager().add(new ItemSpawner(i, GraffitiServer.ITEM_SPAWNER_DELAY,
           GraffitiServer.ITEM_SPAWNER_DELAY_RANGE, GraffitiServer.ITEM_SPAWNER_ITEMS));
     }
+
+    this.allowTeamMateDamage = false;
+    this.getChatManager().setBroadcastDeath(false);
   }
 
   @Override
@@ -95,11 +94,6 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
   @Override
   public void onGameStart() {
-    if (this.stopAfterStart) {
-      this.stopGame();
-    }
-
-    Server.getInGameUsers().forEach(User::unlockLocation);
     this.userManager.run();
 
     this.timeTask = Server.runTaskTimerSynchrony(() -> {
@@ -132,48 +126,29 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     int blueBlocks = blueRedBlocks.getA();
     int redBlocks = blueRedBlocks.getB();
 
-    this.broadcastGameMessage(Chat.getLineSeparator());
+    EndMessage endMessage = new EndMessage();
 
-    Component title;
+    Team blueTeam = this.getGame().getBlueTeam();
+    Team redTeam = this.getGame().getRedTeam();
 
-    int kills = this.getGame().getBlueTeam().getKills()
-        + this.getGame().getRedTeam().getKills();
+    int kills = blueTeam.getKills() + redTeam.getKills();
 
-    Server.getInGameUsers().forEach(u ->
-        u.addCoins((float) ((GameUser) u).getKills() / kills *
+    Server.getInGameUsers().forEach(u -> u.addCoins((float) ((GameUser) u).getKills() / kills *
             GraffitiServer.KILL_COINS_POOL, true));
 
     if (blueBlocks > redBlocks) {
-      title = Component.text("Blue", ExTextColor.BLUE)
-          .append(Component.text(" wins", ExTextColor.GOLD));
-      this.broadcastGameMessage(Component.text("Blue", ExTextColor.BLUE)
-          .append(Component.text(" wins!", ExTextColor.WHITE)));
-
-      this.getGame().getBlueTeam().getUsers()
-          .forEach(u -> u.addCoins(GraffitiServer.WIN_COINS, true));
+      endMessage.winner(blueTeam);
     } else if (redBlocks > blueBlocks) {
-      title = Component.text("Red", ExTextColor.RED)
-          .append(Component.text(" wins", ExTextColor.GOLD));
-      this.broadcastGameMessage(Component.text("Red", ExTextColor.RED)
-          .append(Component.text(" wins!", ExTextColor.WHITE)));
-      this.getGame().getRedTeam().getUsers()
-          .forEach(u -> u.addCoins(GraffitiServer.WIN_COINS, true));
+      endMessage.winner(redTeam);
     } else {
-      title = Component.text("Tie", ExTextColor.WHITE);
-      this.broadcastGameMessage(Component.text("Tie!", ExTextColor.WHITE));
+      endMessage.winner("Tie!");
       Server.getInGameUsers().forEach(u -> u.addCoins(GraffitiServer.WIN_COINS / 2, true));
     }
 
-    Server.broadcastTitle(title, Component.text(blueBlocks, ExTextColor.BLUE)
-            .append(Component.text(" - ", ExTextColor.PUBLIC))
-            .append(Component.text(redBlocks, ExTextColor.RED)),
-        Duration.ofSeconds(5));
-
-    this.broadcastGameMessage(Component.text("Blocks: ", ExTextColor.PUBLIC)
-        .append(Component.text(blueBlocks, ExTextColor.BLUE))
-        .append(Component.text(" - ", ExTextColor.PUBLIC))
-        .append(Component.text(redBlocks, ExTextColor.RED)));
-    this.broadcastGameMessage(Chat.getLineSeparator());
+    endMessage.subTitle(blueTeam.getTDColor() + blueBlocks + " §p- " + redTeam.getTDColor() + redBlocks);
+    endMessage.addExtra("Blocks:");
+    endMessage.addExtra(blueTeam.getTDColor() + blueBlocks + " §p- " + redTeam.getTDColor() + redBlocks);
+    endMessage.send();
   }
 
   @Override
@@ -186,18 +161,15 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   }
 
   @Override
-  public void onGameUserQuitBeforeStart(GameUser user) {
-
+  public void onGameUserQuit(GameUser gameUser) {
+    super.onGameUserQuit(gameUser);
+    this.updateSideboardPlayers();
   }
 
   @Override
-  public void onGameUserQuit(GameUser gameUser) {
-    this.updateSideboardPlayers();
-
-    if (GraffitiServer.getGame().getBlueTeam().getInGameUsers().size() < 1
-        || GraffitiServer.getGame().getRedTeam().getInGameUsers().size() < 1) {
-      this.stopGame();
-    }
+  public boolean checkGameEnd() {
+    return this.getGame().getBlueTeam().getInGameUsers().isEmpty()
+        || this.getGame().getRedTeam().getInGameUsers().isEmpty();
   }
 
   @Override
@@ -206,13 +178,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   }
 
   @Override
-  public void onGameUserRejoin(GameUser user) {
-
-  }
-
-  @Override
   public ExLocation getSpectatorSpawn() {
-    return GraffitiServer.getSpectatorSpawn();
+    return this.getMap().getSpectatorSpawn();
   }
 
   @Override
@@ -226,9 +193,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   }
 
   public void updateSideboardPlayers() {
-    int size = Server.getUsers(u ->
-        u.getStatus().equals(Status.User.IN_GAME)
-            || u.getStatus().equals(Status.User.PRE_GAME)).size();
+    int size =
+        Server.getUsers(u -> u.getStatus().equals(Status.User.IN_GAME) || u.getStatus().equals(Status.User.PRE_GAME)).size();
     this.gameSideboard.updateScore(LineId.PLAYERS, size);
     this.spectatorSideboard.updateScore(LineId.PLAYERS, size);
   }

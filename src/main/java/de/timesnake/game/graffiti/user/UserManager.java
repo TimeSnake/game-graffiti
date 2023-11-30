@@ -7,22 +7,11 @@ package de.timesnake.game.graffiti.user;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.user.User;
-import de.timesnake.basic.bukkit.util.user.event.UserDamageByUserEvent;
 import de.timesnake.basic.bukkit.util.user.event.UserDamageEvent;
-import de.timesnake.basic.bukkit.util.user.event.UserDeathEvent;
-import de.timesnake.basic.bukkit.util.user.event.UserDropItemEvent;
-import de.timesnake.basic.bukkit.util.user.event.UserRespawnEvent;
 import de.timesnake.basic.bukkit.util.user.inventory.ExItemStack;
 import de.timesnake.game.graffiti.main.GameGraffiti;
 import de.timesnake.game.graffiti.server.GraffitiServer;
 import de.timesnake.game.graffiti.server.PaintManager;
-import de.timesnake.library.basic.util.Status;
-import de.timesnake.library.chat.ExTextColor;
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -36,14 +25,16 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class UserManager implements Listener {
 
   private static final List<BlockFace> JUMP_BLOCK_FACES = List.of(BlockFace.NORTH, BlockFace.EAST,
-      BlockFace.SOUTH,
-      BlockFace.WEST);
+      BlockFace.SOUTH, BlockFace.WEST);
   private static final List<Material> JUMP_BLOCK_TYPES = List.of(Material.WHITE_STAINED_GLASS,
-      Material.BLUE_STAINED_GLASS,
-      Material.RED_STAINED_GLASS);
+      Material.BLUE_STAINED_GLASS, Material.RED_STAINED_GLASS);
 
 
   private final Map<User, BukkitTask> jumpTasksByUser = new HashMap<>();
@@ -91,11 +82,6 @@ public class UserManager implements Listener {
   }
 
   @EventHandler
-  public void onItemDrop(UserDropItemEvent e) {
-    e.setCancelled(true);
-  }
-
-  @EventHandler
   public void onJump(PlayerJumpEvent e) {
 
     if (!GraffitiServer.isGameRunning()) {
@@ -118,7 +104,6 @@ public class UserManager implements Listener {
         break;
       }
     }
-
   }
 
   private void runJump(User user) {
@@ -147,62 +132,6 @@ public class UserManager implements Listener {
         this.jumpTasksByUser.remove(user);
       }
     }, 5, 10, GameGraffiti.getPlugin()));
-  }
-
-  @EventHandler
-  public void onUserDamageByUser(UserDamageByUserEvent e) {
-    if (!GraffitiServer.isGameRunning()) {
-      return;
-    }
-
-    GraffitiUser user = (GraffitiUser) e.getUser();
-    GraffitiUser damager = (GraffitiUser) e.getUserDamager();
-
-    if (!e.getUserDamager().getStatus().equals(Status.User.IN_GAME)) {
-      e.setCancelDamage(true);
-      e.setCancelled(true);
-      return;
-    }
-
-    if (user.getTeam().equals(damager.getTeam())) {
-      e.setCancelDamage(true);
-      e.setCancelled(true);
-    }
-  }
-
-  @EventHandler
-  public void onUserDeath(UserDeathEvent event) {
-    if (!GraffitiServer.isGameRunning()) {
-      return;
-    }
-
-    event.getDrops().clear();
-    event.setAutoRespawn(true);
-    event.setKeepInventory(true);
-    event.setBroadcastDeathMessage(false);
-  }
-
-  @EventHandler
-  public void onUserRespawn(UserRespawnEvent event) {
-    if (!GraffitiServer.isGameRunning()) {
-      return;
-    }
-
-    GraffitiUser user = (GraffitiUser) event.getUser();
-
-    event.setRespawnLocation(user.getTeamSpawn());
-
-    user.lockLocation(true);
-    user.setItem(EquipmentSlot.HEAD, new ExItemStack(Material.AIR));
-
-    Server.runTaskTimerSynchrony((time) -> {
-      if (time > 0) {
-        user.showTitle(Component.text(time, ExTextColor.WARNING), Component.empty(),
-            Duration.ofSeconds(1));
-      } else {
-        user.lockLocation(false);
-      }
-    }, GraffitiServer.RESPAWN_TIME, true, 0, 20, GameGraffiti.getPlugin());
   }
 
   @EventHandler
