@@ -6,14 +6,15 @@ package de.timesnake.game.graffiti.server;
 
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
+import de.timesnake.basic.bukkit.util.server.TimeUnit;
 import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard;
 import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard.LineId;
 import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboardBuilder;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.game.util.game.Team;
-import de.timesnake.basic.loungebridge.util.game.ItemSpawner;
 import de.timesnake.basic.loungebridge.util.server.EndMessage;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServerManager;
+import de.timesnake.basic.loungebridge.util.tool.advanced.ItemSpawner;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
 import de.timesnake.database.util.game.DbGame;
 import de.timesnake.database.util.game.DbTmpGame;
@@ -63,8 +64,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
     for (int i = GraffitiMap.ITEM_SPAWNER_START_INDEX; i < GraffitiMap.ITEM_SPAWNER_END_INDEX;
         i++) {
-      this.getToolManager().add(new ItemSpawner(i, GraffitiServer.ITEM_SPAWNER_DELAY,
-          GraffitiServer.ITEM_SPAWNER_DELAY_RANGE, GraffitiServer.ITEM_SPAWNER_ITEMS));
+      this.getToolManager().add(new ItemSpawner(i, TimeUnit.SECONDS, GraffitiServer.ITEM_SPAWNER_DELAY_SEC,
+          GraffitiServer.ITEM_SPAWNER_DELAY_RANGE_SEC, GraffitiServer.ITEM_SPAWNER_ITEMS));
     }
 
     this.allowTeamMateDamage = false;

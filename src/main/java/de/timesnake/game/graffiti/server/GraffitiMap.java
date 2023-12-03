@@ -8,6 +8,7 @@ import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.bukkit.util.world.ExWorld;
 import de.timesnake.basic.bukkit.util.world.ExWorld.Restriction;
 import de.timesnake.basic.game.util.game.Map;
+import de.timesnake.basic.loungebridge.util.game.ResetableMap;
 import de.timesnake.database.util.game.DbMap;
 import de.timesnake.library.basic.util.Loggers;
 import org.bukkit.GameRule;
@@ -15,7 +16,7 @@ import org.bukkit.GameRule;
 import java.util.Collection;
 import java.util.List;
 
-public class GraffitiMap extends Map {
+public class GraffitiMap extends Map implements ResetableMap {
 
   public static final int ITEM_SPAWNER_START_INDEX = 100;
   public static final int ITEM_SPAWNER_END_INDEX = 120;
