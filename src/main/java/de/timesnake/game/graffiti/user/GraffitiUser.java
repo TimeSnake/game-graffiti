@@ -78,7 +78,7 @@ public class GraffitiUser extends GameUser {
   }
 
   @Override
-  public @Nullable ExLocation onGameRespawn() {
+  public @Nullable ExLocation getRespawnLocation() {
     this.setItem(EquipmentSlot.HEAD, new ExItemStack(Material.AIR));
     this.respawnDelayed(GraffitiServer.RESPAWN_TIME);
     return this.getTeamSpawn();
