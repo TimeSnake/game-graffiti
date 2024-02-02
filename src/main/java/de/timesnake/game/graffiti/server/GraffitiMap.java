@@ -14,7 +14,6 @@ import de.timesnake.library.basic.util.Loggers;
 import org.bukkit.GameRule;
 
 import java.util.Collection;
-import java.util.List;
 
 public class GraffitiMap extends Map implements ResetableMap {
 
@@ -23,37 +22,21 @@ public class GraffitiMap extends Map implements ResetableMap {
   private static final int SPECTATOR_SPAWN_INDEX = 0;
   private static final int BLUE_SPAWN_INDEX = 10;
   private static final int RED_SPAWN_INDEX = 20;
-  private static final String MAP_SIZE_TOKEN = "mapSize=";
-  private static final String TIME_TOKEN = "time=";
 
   private static final int DEFAULT_MAP_SIZE = 100;
   private static final int DEFAULT_TIME = 5 * 60;
 
-  private int mapSize = DEFAULT_MAP_SIZE;
-  private Integer time = DEFAULT_TIME;
+  private final int mapSize;
+  private final int time;
 
   public GraffitiMap(DbMap map, boolean loadWorld) {
     super(map, loadWorld);
 
-    List<String> infos = map.getInfo();
+    this.mapSize = this.getProperty("size", Integer.class, DEFAULT_MAP_SIZE,
+        v -> Loggers.GAME.warning("Can not load map size of map " + super.name + ", info map size is not an integer"));
 
-    for (String info : infos) {
-      if (info.startsWith(MAP_SIZE_TOKEN)) {
-        try {
-          this.mapSize = Integer.parseInt(info.replace(MAP_SIZE_TOKEN, ""));
-        } catch (NumberFormatException e) {
-          Loggers.GAME.warning("Can not load map size of map " +
-              super.name + ", info map size is not an integer");
-        }
-      } else if (info.startsWith(TIME_TOKEN)) {
-        try {
-          this.time = Integer.parseInt(info.replace(TIME_TOKEN, ""));
-        } catch (NumberFormatException e) {
-          Loggers.GAME.warning("Can not load time of map " +
-              super.name + ", info time is not an integer");
-        }
-      }
-    }
+    this.time = this.getProperty("time", Integer.class, DEFAULT_TIME,
+        v -> Loggers.GAME.warning("Can not load time of map " + super.name + ", info time is not an integer"));
 
     ExWorld world = this.getWorld();
 
