@@ -10,7 +10,8 @@ import de.timesnake.basic.bukkit.util.world.ExWorld.Restriction;
 import de.timesnake.basic.game.util.game.Map;
 import de.timesnake.basic.loungebridge.util.game.ResetableMap;
 import de.timesnake.database.util.game.DbMap;
-import de.timesnake.library.basic.util.Loggers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.GameRule;
 
 import java.util.Collection;
@@ -26,6 +27,8 @@ public class GraffitiMap extends Map implements ResetableMap {
   private static final int DEFAULT_MAP_SIZE = 100;
   private static final int DEFAULT_TIME = 5 * 60;
 
+  private final Logger logger = LogManager.getLogger("graffiti.map");
+
   private final int mapSize;
   private final int time;
 
@@ -33,10 +36,10 @@ public class GraffitiMap extends Map implements ResetableMap {
     super(map, loadWorld);
 
     this.mapSize = this.getProperty("size", Integer.class, DEFAULT_MAP_SIZE,
-        v -> Loggers.GAME.warning("Can not load map size of map " + super.name + ", info map size is not an integer"));
+        v -> this.logger.warn("Can not load map size of map '{}', info map size is not an integer", super.name));
 
     this.time = this.getProperty("time", Integer.class, DEFAULT_TIME,
-        v -> Loggers.GAME.warning("Can not load time of map " + super.name + ", info time is not an integer"));
+        v -> this.logger.warn("Can not load time of map '{}', info time is not an integer", super.name));
 
     ExWorld world = this.getWorld();
 
