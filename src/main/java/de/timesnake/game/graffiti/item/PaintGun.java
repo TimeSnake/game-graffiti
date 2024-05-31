@@ -8,8 +8,6 @@ import de.timesnake.basic.bukkit.util.user.inventory.ExItemStack;
 import de.timesnake.game.graffiti.server.GraffitiServer;
 import de.timesnake.game.graffiti.server.PaintManager;
 import de.timesnake.game.graffiti.user.GraffitiUser;
-import java.util.HashSet;
-import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -18,6 +16,9 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class PaintGun extends Gun {
 
@@ -43,7 +44,7 @@ public class PaintGun extends Gun {
     if (action.isRightClick()) {
       if (!this.activeUsers.contains(user)) {
         this.activeUsers.add(user);
-        user.addPotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 16);
+        user.addPotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 16);
         user.setItem(EquipmentSlot.HEAD,
             new ExItemStack(Material.CARVED_PUMPKIN).setMoveable(false));
 
