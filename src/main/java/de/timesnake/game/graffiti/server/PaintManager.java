@@ -224,15 +224,13 @@ public class PaintManager implements Listener, UserInventoryInteractListener {
           Vector sprayVec = baseVec.clone().rotateAroundAxis(dir, rot).normalize();
 
           Particle.DustOptions dust = new Particle.DustOptions(user.getTeam().getColor(), 0.5f);
-          loc.getWorld().spawnParticle(Particle.REDSTONE, loc.getX(), loc.getY(), loc.getZ(), 6,
+          loc.getWorld().spawnParticle(Particle.DUST, loc.getX(), loc.getY(), loc.getZ(), 6,
               sprayVec.getX(), sprayVec.getY(), sprayVec.getZ(), 1, dust);
         }
 
         Block block = user.getTargetBlock(null, MAX_SPRAY_DISTANCE);
 
-        if (block != null) {
-          drawCircle(user, block, loc, SPRAY_RADIUS, SPRAY_DENSITY);
-        }
+        drawCircle(user, block, loc, SPRAY_RADIUS, SPRAY_DENSITY);
 
         Entity entity = user.getTargetEntity(MAX_SPRAY_DISTANCE);
 
