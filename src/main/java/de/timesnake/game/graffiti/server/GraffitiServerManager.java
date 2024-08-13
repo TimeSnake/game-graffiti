@@ -48,7 +48,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
     this.gameSideboard = Server.getScoreboardManager()
         .registerExSideboard(new ExSideboardBuilder()
-            .name(GraffitiServer.getGame().getName())
+            .name("graffiti")
             .title("§6§l" + GraffitiServer.getGame().getDisplayName())
             .lineSpacer()
             .addLine(LineId.TIME)
@@ -56,7 +56,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
 
     this.spectatorSideboard = Server.getScoreboardManager()
         .registerExSideboard(new ExSideboardBuilder()
-            .name(GraffitiServer.getGame().getName())
+            .name("graffiti_spec")
             .title("§6§l" + GraffitiServer.getGame().getDisplayName())
             .lineSpacer()
             .addLine(LineId.TIME)
