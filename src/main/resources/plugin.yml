@@ -3,7 +3,7 @@ version: 1.2.0
 name: game-graffiti
 author: timesnake
 depend: [ basic-lounge-bridge ]
-api-version: 1.13
+api-version: 1.21
 
 commands:
      
