@@ -1,5 +1,5 @@
 main: de.timesnake.game.graffiti.main.GameGraffiti
-version: 1.2.0
+version: ${version}
 name: game-graffiti
 author: timesnake
 depend: [ basic-lounge-bridge ]
