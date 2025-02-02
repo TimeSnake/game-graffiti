@@ -83,11 +83,6 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   }
 
   @Override
-  public Plugin getGamePlugin() {
-    return Plugin.GRAFFITI;
-  }
-
-  @Override
   public void onMapLoad() {
     this.time = this.getMap().getTime();
     this.updateSideboardTime();
