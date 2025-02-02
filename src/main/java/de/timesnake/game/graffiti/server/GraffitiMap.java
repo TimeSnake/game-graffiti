@@ -14,8 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.GameRule;
 
-import java.util.Collection;
-
 public class GraffitiMap extends Map implements ResetableMap {
 
   public static final int ITEM_SPAWNER_START_INDEX = 100;
@@ -64,10 +62,6 @@ public class GraffitiMap extends Map implements ResetableMap {
 
   public ExLocation getRedSpawn() {
     return super.getLocation(RED_SPAWN_INDEX);
-  }
-
-  public Collection<ExLocation> getItemSpawnerLocations() {
-    return super.getLocations(ITEM_SPAWNER_START_INDEX, ITEM_SPAWNER_END_INDEX);
   }
 
   public int getMapSize() {
