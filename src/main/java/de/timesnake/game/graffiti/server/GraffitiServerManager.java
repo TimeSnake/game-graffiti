@@ -7,9 +7,9 @@ package de.timesnake.game.graffiti.server;
 import de.timesnake.basic.bukkit.util.Server;
 import de.timesnake.basic.bukkit.util.ServerManager;
 import de.timesnake.basic.bukkit.util.server.TimeUnit;
-import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard;
-import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboard.LineId;
-import de.timesnake.basic.bukkit.util.user.scoreboard.ExSideboardBuilder;
+import de.timesnake.basic.bukkit.util.user.scoreboard.KeyedSideboard;
+import de.timesnake.basic.bukkit.util.user.scoreboard.KeyedSideboard.LineId;
+import de.timesnake.basic.bukkit.util.user.scoreboard.KeyedSideboardBuilder;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.game.util.game.Team;
 import de.timesnake.basic.loungebridge.util.server.EndMessage;
@@ -35,8 +35,8 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   private boolean stopped = false;
   private Integer time;
   private BukkitTask timeTask;
-  private ExSideboard gameSideboard;
-  private ExSideboard spectatorSideboard;
+  private KeyedSideboard gameSideboard;
+  private KeyedSideboard spectatorSideboard;
   private UserManager userManager;
   private PaintManager paintManager;
 
@@ -47,7 +47,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
     this.paintManager = new PaintManager();
 
     this.gameSideboard = Server.getScoreboardManager()
-        .registerExSideboard(new ExSideboardBuilder()
+        .registerExSideboard(new KeyedSideboardBuilder()
             .name("graffiti")
             .title("§6§l" + GraffitiServer.getGame().getDisplayName())
             .lineSpacer()
@@ -55,7 +55,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
             .addLine(LineId.PLAYERS));
 
     this.spectatorSideboard = Server.getScoreboardManager()
-        .registerExSideboard(new ExSideboardBuilder()
+        .registerExSideboard(new KeyedSideboardBuilder()
             .name("graffiti_spec")
             .title("§6§l" + GraffitiServer.getGame().getDisplayName())
             .lineSpacer()
@@ -179,7 +179,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   }
 
   @Override
-  public ExSideboard getSpectatorSideboard() {
+  public KeyedSideboard getSpectatorSideboard() {
     return this.spectatorSideboard;
   }
 
@@ -196,7 +196,7 @@ public class GraffitiServerManager extends LoungeBridgeServerManager<GraffitiGam
   }
 
   @Override
-  public ExSideboard getGameSideboard() {
+  public KeyedSideboard getGameSideboard() {
     return this.gameSideboard;
   }
 
