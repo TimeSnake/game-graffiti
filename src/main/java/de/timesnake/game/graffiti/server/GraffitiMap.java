@@ -6,7 +6,7 @@ package de.timesnake.game.graffiti.server;
 
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.bukkit.util.world.ExWorld;
-import de.timesnake.basic.bukkit.util.world.ExWorld.Restriction;
+import de.timesnake.basic.bukkit.util.world.ExWorldOption;
 import de.timesnake.basic.game.util.game.Map;
 import de.timesnake.basic.loungebridge.util.game.ResetableMap;
 import de.timesnake.database.util.game.DbMap;
@@ -42,11 +42,11 @@ public class GraffitiMap extends Map implements ResetableMap {
     ExWorld world = this.getWorld();
 
     world.setAutoSave(false);
-    world.restrict(ExWorld.Restriction.BLOCK_PLACE, true);
-    world.restrict(ExWorld.Restriction.BLOCK_BREAK, true);
-    world.restrict(ExWorld.Restriction.FOOD_CHANGE, true);
-    world.restrict(Restriction.DROP_PICK_ITEM, true);
-    world.restrict(Restriction.CRAFTING, true);
+    world.setOption(ExWorldOption.ALLOW_BLOCK_PLACE, false);
+    world.setOption(ExWorldOption.ALLOW_BLOCK_BREAK, false);
+    world.setOption(ExWorldOption.CHANGE_FOOD, false);
+    world.setOption(ExWorldOption.ALLOW_DROP_PICK_ITEM, false);
+    world.setOption(ExWorldOption.ALLOW_CRAFTING, false);
     world.setGameRule(GameRule.KEEP_INVENTORY, true);
     world.setGameRule(GameRule.NATURAL_REGENERATION, false);
     world.setExceptService(true);
